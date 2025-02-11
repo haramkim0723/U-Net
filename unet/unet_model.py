@@ -1,10 +1,12 @@
 """ Full assembly of the parts to form the complete network """
 
+import torch
+import torch.nn as nn
 from .unet_parts import *
 
 
 class UNet(nn.Module):
-    def __init__(self, n_channels, n_classes, bilinear=False):
+    def __init__(self, n_channels, n_classes=1, bilinear=False):  # 🔥 Binary Segmentation → n_classes=1
         super(UNet, self).__init__()
         self.n_channels = n_channels
         self.n_classes = n_classes
@@ -20,7 +22,7 @@ class UNet(nn.Module):
         self.up2 = (Up(512, 256 // factor, bilinear))
         self.up3 = (Up(256, 128 // factor, bilinear))
         self.up4 = (Up(128, 64, bilinear))
-        self.outc = (OutConv(64, n_classes))
+        self.outc = (OutConv(64, n_classes))  # 🔥 출력 채널 = 1
 
     def forward(self, x):
         x1 = self.inc(x)
@@ -32,8 +34,8 @@ class UNet(nn.Module):
         x = self.up2(x, x3)
         x = self.up3(x, x2)
         x = self.up4(x, x1)
-        logits = self.outc(x)
-        return logits
+        logits = self.outc(x)  # 🔥 logits 값 반환 (sigmoid 없음)
+        return logits  # 🚀 학습 시에는 sigmoid X
 
     def use_checkpointing(self):
         self.inc = torch.utils.checkpoint(self.inc)
