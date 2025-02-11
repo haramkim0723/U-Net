@@ -26,7 +26,7 @@ image_paths = glob.glob(os.path.join(image_folder, "*.jpg"))  # 이미지 파일
 for img_path in image_paths:
     img = cv2.imread(img_path)
     if img is None:
-        print(f"❌ [ERROR] 이미지 로드 실패: {img_path}")
+        print(f" [ERROR] 이미지 로드 실패: {img_path}")
         continue
 
     filename = os.path.basename(img_path)
@@ -40,27 +40,27 @@ for img_path in image_paths:
 
     mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
     if mask is None:
-        print(f"❌ [ERROR] 마스크 로드 실패: {mask_path}")
+        print(f" [ERROR] 마스크 로드 실패: {mask_path}")
         continue
 
     # **원본 저장 (JPG 이미지 & PNG 마스크)**
     cv2.imwrite(os.path.join(output_image_folder, f"{base_name}.jpg"), img, [cv2.IMWRITE_JPEG_QUALITY, 95])
     cv2.imwrite(os.path.join(output_mask_folder, f"{base_name}.png"), mask)
-    print(f"✅ [ORIGINAL] {filename}")
+    print(f" [ORIGINAL] {filename}")
 
     # **좌우 반전 (이미지 & 마스크)**
     img_flip_lr = cv2.flip(img, 1)
     mask_flip_lr = cv2.flip(mask, 1)
     cv2.imwrite(os.path.join(output_image_folder, f"{base_name}_flip_lr.jpg"), img_flip_lr, [cv2.IMWRITE_JPEG_QUALITY, 95])
     cv2.imwrite(os.path.join(output_mask_folder, f"{base_name}_flip_lr.png"), mask_flip_lr)
-    print(f"🔄 [FLIP_LR] {filename}")
+    print(f" [FLIP_LR] {filename}")
 
     # **상하 반전 (이미지 & 마스크)**
     img_flip_ud = cv2.flip(img, 0)
     mask_flip_ud = cv2.flip(mask, 0)
     cv2.imwrite(os.path.join(output_image_folder, f"{base_name}_flip_ud.jpg"), img_flip_ud, [cv2.IMWRITE_JPEG_QUALITY, 95])
     cv2.imwrite(os.path.join(output_mask_folder, f"{base_name}_flip_ud.png"), mask_flip_ud)
-    print(f"🔄 [FLIP_UD] {filename}")
+    print(f" [FLIP_UD] {filename}")
 
     # **채도 & 대비 조합 (이미지 & 마스크 동일 적용)**
     for sat, contrast in itertools.product(saturation_values, contrast_values):
@@ -76,18 +76,18 @@ for img_path in image_paths:
         new_filename = f"{base_name}_s{sat}_c{contrast}"
         cv2.imwrite(os.path.join(output_image_folder, f"{new_filename}.jpg"), img_mod, [cv2.IMWRITE_JPEG_QUALITY, 95])
         cv2.imwrite(os.path.join(output_mask_folder, f"{new_filename}.png"), mask)  # **마스크 원본 유지**
-        print(f"🎨 [COMBO] {new_filename} (Saturation: {sat}, Contrast: {contrast})")
+        print(f" [COMBO] {new_filename} (Saturation: {sat}, Contrast: {contrast})")
 
         # 좌우 반전 저장 (JPG 이미지 & PNG 마스크)
         cv2.imwrite(os.path.join(output_image_folder, f"{new_filename}_flip_lr.jpg"), cv2.flip(img_mod, 1), [cv2.IMWRITE_JPEG_QUALITY, 95])
         cv2.imwrite(os.path.join(output_mask_folder, f"{new_filename}_flip_lr.png"), cv2.flip(mask, 1))
-        print(f"🎨🔄 [COMBO_FLIP_LR] {new_filename}")
+        print(f" [COMBO_FLIP_LR] {new_filename}")
 
         # 상하 반전 저장 (JPG 이미지 & PNG 마스크)
         cv2.imwrite(os.path.join(output_image_folder, f"{new_filename}_flip_ud.jpg"), cv2.flip(img_mod, 0), [cv2.IMWRITE_JPEG_QUALITY, 95])
         cv2.imwrite(os.path.join(output_mask_folder, f"{new_filename}_flip_ud.png"), cv2.flip(mask, 0))
-        print(f"🎨🔄 [COMBO_FLIP_UD] {new_filename}")
+        print(f" [COMBO_FLIP_UD] {new_filename}")
 
     print(f"✅ [DONE] {filename}")
 
-print("🎉 데이터 증강 완료! (JPG 이미지 & PNG 마스크, 1:1 매칭 유지)")
+print(" 데이터 증강 완료!")
