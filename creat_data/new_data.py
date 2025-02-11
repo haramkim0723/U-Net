@@ -33,7 +33,7 @@ for img_path in image_paths:
     base_name = os.path.splitext(filename)[0]  # 확장자 제거
 
     # 마스크 이미지 로드 (파일명이 동일한 PNG 확장자로 존재해야 함)
-    mask_path = os.path.join(mask_folder, f"{base_name}.png")
+    mask_path = os.path.join(mask_folder, f"{base_name}_mask.png")
     if not os.path.exists(mask_path):
         print(f"⚠ [SKIP] 마스크 없음: {mask_path}")
         continue
