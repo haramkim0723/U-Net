@@ -11,7 +11,7 @@ from tqdm import tqdm
 import wandb
 from evaluate import evaluate
 from unet import UNet
-from utils.data_loading import BasicDataset
+from utils.data_loading import BasicDataset  #  utils. 제거
 from utils.dice_score import dice_loss
 
 dir_img = Path('./data/imgs/')
@@ -21,9 +21,9 @@ dir_checkpoint = Path('./checkpoints/')
 def train_model(
         model,
         device,
-        epochs: int = 5,
-        batch_size: int = 1,
-        learning_rate: float = 1e-5,
+        epochs: int = 80,
+        batch_size: int = 8,
+        learning_rate: float = 1e-4,
         val_percent: float = 0.1,
         save_checkpoint: bool = True,
         img_scale: float = 0.5,
@@ -44,7 +44,7 @@ def train_model(
     experiment.config.update(dict(epochs=epochs, batch_size=batch_size, learning_rate=learning_rate))
 
     optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
-    criterion = nn.BCEWithLogitsLoss()  # ✅ Binary Segmentation 손실 함수
+    criterion = nn.BCEWithLogitsLoss()  #  Binary Segmentation 손실 함수
     global_step = 0
 
     for epoch in range(1, epochs + 1):
@@ -55,11 +55,11 @@ def train_model(
                 images, true_masks = batch['image'], batch['mask']
 
                 images = images.to(device, dtype=torch.float32)
-                true_masks = true_masks.to(device, dtype=torch.float32)  # ✅ float 타입으로 변환
+                true_masks = true_masks.to(device, dtype=torch.float32)  #  float 타입으로 변환
 
                 masks_pred = model(images)  # logits 값
-                loss = criterion(masks_pred.squeeze(1), true_masks)  # ✅ BCEWithLogitsLoss 적용
-                loss += dice_loss(F.sigmoid(masks_pred.squeeze(1)), true_masks, multiclass=False)  # ✅ sigmoid 적용 후 Dice Loss
+                loss = criterion(masks_pred.squeeze(1), true_masks.squeeze(1))   #  BCEWithLogitsLoss 적용
+                loss += dice_loss(F.sigmoid(masks_pred.squeeze(1)), true_masks.squeeze(1), multiclass=False) #  sigmoid 적용 후 Dice Loss
 
                 optimizer.zero_grad()
                 loss.backward()
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     logging.info(f'Using device {device}')
-    model = UNet(n_channels=3, n_classes=1, bilinear=False).to(device)  # ✅ n_classes=1 로 고정
+    model = UNet(n_channels=3, n_classes=1, bilinear=False).to(device)  #  n_classes=1 로 고정
 
     train_model(
         model=model,
