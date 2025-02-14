@@ -16,7 +16,9 @@ from utils.dice_score import dice_loss
 
 dir_img = Path('./data/imgs/')
 dir_mask = Path('./data/masks/')
-dir_checkpoint = Path('./checkpoints/'
+dir_checkpoint = Path('./checkpoints/')
+
+def train_model(
         model,
         device,
         epochs: int = 80,
@@ -30,9 +32,7 @@ dir_checkpoint = Path('./checkpoints/'
         momentum: float = 0.999,
         gradient_clipping: float = 1.0,
 ):
-    dataset = BasicDataset(dir_img, dir_mask, img_scale))
-
-def train_model(
+    dataset = BasicDataset(dir_img, dir_mask, img_scale)
     n_val = int(len(dataset) * val_percent)
     n_train = len(dataset) - n_val
     train_set, val_set = random_split(dataset, [n_train, n_val], generator=torch.Generator().manual_seed(0))
