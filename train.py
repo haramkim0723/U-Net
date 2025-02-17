@@ -22,7 +22,7 @@ def train_model(
         model,
         device,
         epochs: int = 80,
-        batch_size: int = 8,
+        batch_size: int = 27,
         learning_rate: float = 1e-4,
         val_percent: float = 0.1,
         save_checkpoint: bool = True,
@@ -85,8 +85,8 @@ if __name__ == '__main__':
 
     train_model(
         model=model,
-        epochs=5,
+        epochs=80,
         batch_size=1,
-        learning_rate=1e-5,
+        learning_rate=1e-4,
         device=device
     )
