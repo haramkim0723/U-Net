@@ -22,11 +22,11 @@ denoised_mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel, iterations=2)
 fig, ax = plt.subplots(1, 2, figsize=(18, 12))
 
 ax[0].imshow(mask, cmap="gray")
-ax[0].set_title("1️⃣ Contour Filler Applied")
+ax[0].set_title("Contour Filler Applied")
 ax[0].axis("off")
 
 ax[1].imshow(denoised_mask, cmap="gray")
-ax[1].set_title("2️⃣ Noise Removal Applied")
+ax[1].set_title("Noise Removal Applied")
 ax[1].axis("off")
 
 plt.show()

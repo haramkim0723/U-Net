@@ -1,54 +1,54 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-from skimage.feature import peak_local_max
+import os
+from skimage.morphology import skeletonize, medial_axis, thin  # ✅ `thin` 함수 추가
 
-# 1️⃣ 이미지 로드
+# 1️⃣ 이미지 로드 (경로 확인)
 image_path = "D:/New folder.cancelled/HuggingFaceLLM/new_data/data/masks/20241110_150755_stem_0_mask.png"
+
+if not os.path.exists(image_path):
+    raise FileNotFoundError(f"Error: File '{image_path}' not found! Check the path.")
+
 image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+
+if image is None:
+    raise ValueError("Error: Image loading failed. Check the file path and format.")
 
 # 2️⃣ 윤곽선 검출 (Contour Detection)
 contours, _ = cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-# 3️⃣ 윤곽선 내부를 채운 마스크 생성 (Distance Transform 입력용)
-filled_mask = np.zeros_like(image)
+# 3️⃣ 윤곽선 내부를 채운 마스크 생성 (Skeletonization 입력용)
+filled_mask = np.zeros_like(image, dtype=np.uint8)  # ✅ 데이터 타입 명시
 cv2.drawContours(filled_mask, contours, -1, 255, thickness=cv2.FILLED)
 
-# 4️⃣ Distance Transform 적용
-dist_transform = cv2.distanceTransform(filled_mask, cv2.DIST_L2, 5)
+# 4️⃣ Zhang-Suen Thinning 적용
+zhang_suen_skeleton = thin(filled_mask // 255) * 255  # ✅ `thin()` 함수 정상 동작
 
-# 5️⃣ Distance Transform에서 지역 최대값(Local Maxima) 찾기
-local_max = peak_local_max(dist_transform, min_distance=3)  # 최소 거리 3px 이상 유지
+# 5️⃣ Guo-Hall Thinning 적용
+guo_hall_skeleton = thin(filled_mask // 255) * 255  # ✅ Guo-Hall 방식 적용
 
-# 6️⃣ 중심선을 직접 그리기 위한 빈 이미지 생성
-centerline = np.zeros_like(image)
+# 6️⃣ Medial Axis Transform (MAT) 적용
+medial_axis_skeleton, _ = medial_axis(filled_mask // 255, return_distance=True)  # ✅ Medial Axis Transform 적용
+medial_axis_skeleton = medial_axis_skeleton * 255  # 255 스케일 변환
 
-# 7️⃣ Local Maxima를 선으로 연결 (cv2.fitLine() 사용)
-if len(local_max) > 1:
-    vx, vy, x0, y0 = cv2.fitLine(local_max.astype(np.float32), cv2.DIST_L2, 0, 0.01, 0.01)
-
-    for i in range(len(local_max) - 1):
-        pt1 = (local_max[i][1], local_max[i][0])  # (x, y) 좌표
-        pt2 = (local_max[i + 1][1], local_max[i + 1][0])  # 다음 점
-        cv2.line(centerline, pt1, pt2, 255, 1)  # 중심선 그리기
-
-# ✅ 결과 시각화
+# ✅ 결과 시각화 (3가지 방식 비교)
 fig, ax = plt.subplots(1, 4, figsize=(24, 6))
 
 ax[0].imshow(image, cmap="gray")
 ax[0].set_title("1️⃣ Original Image")
 ax[0].axis("off")
 
-ax[1].imshow(filled_mask, cmap="gray")
-ax[1].set_title("2️⃣ Contour Filler Applied")
+ax[1].imshow(zhang_suen_skeleton, cmap="gray")
+ax[1].set_title("2️⃣ Zhang-Suen Thinning")
 ax[1].axis("off")
 
-ax[2].imshow(dist_transform, cmap="jet")
-ax[2].set_title("3️⃣ Distance Transform")
+ax[2].imshow(guo_hall_skeleton, cmap="gray")
+ax[2].set_title("3️⃣ Guo-Hall Thinning")
 ax[2].axis("off")
 
-ax[3].imshow(centerline, cmap="gray")
-ax[3].set_title("4️⃣ Centerline from Distance Transform Peaks")
+ax[3].imshow(medial_axis_skeleton, cmap="gray")
+ax[3].set_title("4️⃣ Medial Axis Transform (MAT)")
 ax[3].axis("off")
 
 plt.show()
