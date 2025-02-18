@@ -11,12 +11,12 @@ image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 
 # 윤곽선 검출 (Contour Detection)
 contours, _ = cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-contours = sorted(contours, key=cv2.contourArea, reverse=True)  # 🔹 면적 기준 정렬
+contours = sorted(contours, key=cv2.contourArea, reverse=True)  #면적 기준 정렬
 main_contour = contours[0]  # 🔹 가장 큰 윤곽선 선택
 
 # 윤곽선 내부를 채운 마스크 생성
 mask = np.zeros_like(image)
-cv2.drawContours(mask, [main_contour], -1, 255, thickness=cv2.FILLED)  # 🔹 thickness 인자 올바르게 수정
+cv2.drawContours(mask, [main_contour], -1, 255, thickness=cv2.FILLED)
 
 # 닫힘 연산 (Closing) 적용하여 끊어진 선 연결
 kernel = np.ones((5, 5), np.uint8)
