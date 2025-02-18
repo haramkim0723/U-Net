@@ -38,7 +38,7 @@ class BasicDataset(Dataset):
         img = np.asarray(pil_img)
 
         if is_mask:
-            # 🔥 Binary Mask: Convert to 0 and 1
+            #  Binary Mask: Convert to 0 and 1
             img = (img > 128).astype(np.float32)  # Thresholding
             return img
 
@@ -71,5 +71,5 @@ class BasicDataset(Dataset):
 
         return {
             'image': torch.as_tensor(img.copy()).float().contiguous(),
-            'mask': torch.as_tensor(mask.copy()).float().unsqueeze(0).contiguous()  # 🔥 Ensure shape (1, H, W)
+            'mask': torch.as_tensor(mask.copy()).float().unsqueeze(0).contiguous()  #  Ensure shape (1, H, W)
         }

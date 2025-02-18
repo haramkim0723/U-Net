@@ -26,7 +26,7 @@ image_paths = glob.glob(os.path.join(image_folder, "*.jpg"))  # 이미지 파일
 for img_path in image_paths:
     img = cv2.imread(img_path)
     if img is None:
-        print(f" [ERROR] 이미지 로드 실패: {img_path}")
+        print(f"[ERROR] 이미지 로드 실패: {img_path}")
         continue
 
     filename = os.path.basename(img_path)
@@ -35,12 +35,12 @@ for img_path in image_paths:
     # 마스크 이미지 로드 (파일명이 동일한 PNG 확장자로 존재해야 함)
     mask_path = os.path.join(mask_folder, f"{base_name}_mask.png")
     if not os.path.exists(mask_path):
-        print(f"⚠ [SKIP] 마스크 없음: {mask_path}")
+        print(f"[SKIP] 마스크 없음: {mask_path}")
         continue
 
     mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
     if mask is None:
-        print(f" [ERROR] 마스크 로드 실패: {mask_path}")
+        print(f"[ERROR] 마스크 로드 실패: {mask_path}")
         continue
 
     # **원본 저장 (JPG 이미지 & PNG 마스크)**
@@ -88,6 +88,6 @@ for img_path in image_paths:
         cv2.imwrite(os.path.join(output_mask_folder, f"{new_filename}_flip_ud.png"), cv2.flip(mask, 0))
         print(f" [COMBO_FLIP_UD] {new_filename}")
 
-    print(f"✅ [DONE] {filename}")
+    print(f"[DONE] {filename}")
 
 print(" 데이터 증강 완료!")
