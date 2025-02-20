@@ -9,7 +9,7 @@ image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 
 # 윤곽선 검출 (Contour Detection)
 contours, _ = cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-contours = sorted(contours, key=cv2.contourArea, reverse=True)  # 🔹 면적 기준 정렬
+contours = sorted(contours, key=cv2.contourArea, reverse=True)  # 면적 기준 정렬
 main_contour = contours[0]  # 🔹 가장 큰 윤곽선 선택
 
 # 윤곽선 내부를 채운 마스크 생성
@@ -55,7 +55,7 @@ filtered_points_random_uniform = selected_points_random_uniform[distances_random
 filtered_distances_random_uniform = distances_random_uniform[distances_random_uniform >= threshold_random_uniform]
 
 # 필터링 후 평균 거리 다시 계산
-new_mean_distance_random_uniform = np.mean(filtered_distances_random_uniform)
+new_mean_distance = np.mean(filtered_distances_random_uniform)
 
 # 스켈레톤 이미지에 균일한 랜덤 점 표시
 skeleton_with_random_uniform_points = cv2.cvtColor(skeleton_corrected.astype(np.uint8), cv2.COLOR_GRAY2BGR)
@@ -81,6 +81,6 @@ ax[2].axis("off")
 plt.show()
 
 # 최종 줄기 굵기(Stem Thickness) 계산
-stem_thickness_random_uniform = 2 * new_mean_distance_random_uniform
-print(f"필터링 후 평균 거리: {new_mean_distance_random_uniform:.2f} 픽셀")
-print(f"추정된 줄기 굵기(Stem Thickness): {stem_thickness_random_uniform:.2f} 픽셀")
+stem_thickness = 2 * new_mean_distance
+print(f"필터링 후 평균 거리: {new_mean_distance:.2f} 픽셀")
+print(f"추정된 줄기 굵기(Stem Thickness): {stem_thickness:.2f} 픽셀")
