@@ -23,7 +23,7 @@ if len(contours) > 0:
             cv2.drawContours(mask_filled, [contours[i]], -1, 255, thickness=cv2.FILLED)
 
 # 객체 내부가 255(흰색), 배경이 0(검은색)인지 확인 후 반전 ( 골격화 함수 때문 )
-if np.mean(mask_filled) > 128:  # 배경이 밝으면 반전
+if np.mean(mask_filled) > 128:  # 배경이 255면 반전
     mask_filled = cv2.bitwise_not(mask_filled)
 
 # 이진화 적용 (객체 내부만 골격화)
