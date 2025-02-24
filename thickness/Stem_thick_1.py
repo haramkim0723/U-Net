@@ -136,4 +136,4 @@ mask_image = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
 thickness_result = stem_thickness(mask_image)
 
 # 결과 출력
-print(f"🌱 최종 줄기 굵기: {thickness_result:.2f} 픽셀")
+print(f" 최종 줄기 굵기: {thickness_result:.2f} 픽셀")
