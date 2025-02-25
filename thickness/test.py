@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from skimage.morphology import skeletonize
 
-test_mask_path = "D:/New folder.cancelled/HuggingFaceLLM/new_data/data/masks/20241110_150755_stem_0_mask.png"
+test_mask_path = "D:/code/Pytorch-UNet-master/data/masks/20241110_160723_refbar_7.png"
 test_image = cv2.imread(test_mask_path, cv2.IMREAD_GRAYSCALE)
 
 # 닫힘 연산 (Closing) 적용하여 끊어진 윤곽선 채움
@@ -13,7 +13,7 @@ closed_mask = cv2.morphologyEx(test_image, cv2.MORPH_CLOSE, kernel, iterations=4
 # 노이즈 제거 (Opening : 열림 연산)
 denoised_mask = cv2.morphologyEx(closed_mask, cv2.MORPH_OPEN, kernel, iterations=2)
 
-contours, hierarchy = cv2.findContours(denoised_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+contours, hierarchy = cv2.findContours(denoised_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 # 윤곽선 내부를 채울 마스크 생성
 mask_filled = np.zeros_like(test_image)
 if len(contours) > 0:

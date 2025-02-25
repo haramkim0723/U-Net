@@ -1,8 +1,8 @@
 import cv2
 from yolo_unet_processing import process_yolo_unet
-from skeleton_analysis import analyze_stem_thickness
-from data_management import separate_stem_and_ruler
-from real_thick import real_thick
+from deta.skeleton_analysis import analyze_stem_thickness
+from deta.data_management import separate_stem_and_ruler
+from deta.real_thick import real_thick
 # 실제 기준 막대 길이 = 19.5cm, 굵기 = 0.5cm
 
 # 실제 기준 막대 크기 (길이 & 굵기)
