@@ -141,27 +141,37 @@ x_set2 = np.linspace(summary_stats.loc[1, "Mean (cm)"] - 3*summary_stats.loc[1, 
                      summary_stats.loc[1, "Mean (cm)"] + 3*summary_stats.loc[1, "Standard Deviation (cm)"], 100)
 y_set2 = stats.norm.pdf(x_set2, summary_stats.loc[1, "Mean (cm)"], summary_stats.loc[1, "Standard Deviation (cm)"])
 
-# 개별 그래프 시각화
+# 개별 그래프 시각화 (평균과 표준편차 표시)
 plt.figure(figsize=(12, 5))
 
-# Set 1 정규분포 그래프
+# Set 1 그래프
 plt.subplot(1, 2, 1)
 plt.plot(x_set1, y_set1, label="Set 1", color='skyblue')
 plt.fill_between(x_set1, y_set1, alpha=0.3, color='skyblue')
+mean1 = summary_stats.loc[0, "Mean (cm)"]
+std1 = summary_stats.loc[0, "Standard Deviation (cm)"]
+plt.axvline(mean1, color='blue', linestyle='--', label=f"Mean: {mean1:.4f} cm")
+plt.axvline(mean1 - std1, color='gray', linestyle='--', label=f"±1σ: {std1:.4f} cm")
+plt.axvline(mean1 + std1, color='gray', linestyle='--')
 plt.title("Normal Distribution - Set 1")
 plt.xlabel("Stem Thickness (cm)")
 plt.ylabel("Probability Density")
-plt.grid(True, linestyle='--', alpha=0.6)
 plt.legend()
+plt.grid(True, linestyle='--', alpha=0.6)
 
-# Set 2 정규분포 그래프
+# Set 2 그래프
 plt.subplot(1, 2, 2)
 plt.plot(x_set2, y_set2, label="Set 2", color='lightgreen')
 plt.fill_between(x_set2, y_set2, alpha=0.3, color='lightgreen')
+mean2 = summary_stats.loc[1, "Mean (cm)"]
+std2 = summary_stats.loc[1, "Standard Deviation (cm)"]
+plt.axvline(mean2, color='green', linestyle='--', label=f"Mean: {mean2:.4f} cm")
+plt.axvline(mean2 - std2, color='gray', linestyle='--', label=f"±1σ: {std2:.4f} cm")
+plt.axvline(mean2 + std2, color='gray', linestyle='--')
 plt.title("Normal Distribution - Set 2")
 plt.xlabel("Stem Thickness (cm)")
 plt.ylabel("Probability Density")
-plt.grid(True, linestyle='--', alpha=0.6)
 plt.legend()
+plt.grid(True, linestyle='--', alpha=0.6)
 
 plt.show()
