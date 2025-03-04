@@ -86,8 +86,8 @@ def PexelToCm(x, real_cm=0.5, index=1):
 
 # 이미지 세트 정의
 image_sets = [
-    {"stem": "/mnt/data/stem_1.png", "bar": "/mnt/data/bar_1.png"},
-    {"stem": "/mnt/data/stem_2.png", "bar": "/mnt/data/bar_2.png"}
+    {"stem": "D:/code/data/bar_1/stem_1.png", "bar": "D:/code/data/bar_1/bar_1.png"},
+    {"stem": "D:/code/data/bar_1/stem_2.png", "bar": "D:/code/data/bar_1/bar_2.png"}
 ]
 
 # 50회 반복 수행
@@ -135,6 +135,6 @@ for trial in range(num_trials):
 
 # 데이터프레임으로 정리 및 저장
 df_trials = pd.DataFrame(trial_results)
-df_trials.to_csv("/mnt/data/stem_thickness_trials.csv", index=False)
+df_trials.to_csv("D:/code/data/stem_thickness_trials.csv", index=False)
 
 logging.info("✅ 50회 반복 결과를 'stem_thickness_trials.csv'에 저장 완료!")
