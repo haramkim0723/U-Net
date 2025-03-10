@@ -132,13 +132,27 @@ summary_stats = pd.DataFrame({
     "Standard Deviation (cm)": [df_split['set1_stem_real_cm'].std(), df_split['set2_stem_real_cm'].std()]
 })
 
+# 정규성 검정 추가
+shapiro_test_set1 = stats.shapiro(df_split['set1_stem_real_cm'])
+shapiro_test_set2 = stats.shapiro(df_split['set2_stem_real_cm'])
+
+chi2_test_set1 = stats.chisquare(df_split['set1_stem_real_cm'])
+chi2_test_set2 = stats.chisquare(df_split['set2_stem_real_cm'])
+
+# 결과 출력
+print("Shapiro-Wilk Test for Set 1: W = {:.4f}, p-value = {:.4f}".format(shapiro_test_set1.statistic, shapiro_test_set1.pvalue))
+print("Shapiro-Wilk Test for Set 2: W = {:.4f}, p-value = {:.4f}".format(shapiro_test_set2.statistic, shapiro_test_set2.pvalue))
+
+print("Chi-Square Test for Set 1: Statistic = {:.4f}, p-value = {:.4f}".format(chi2_test_set1.statistic, chi2_test_set1.pvalue))
+print("Chi-Square Test for Set 2: Statistic = {:.4f}, p-value = {:.4f}".format(chi2_test_set2.statistic, chi2_test_set2.pvalue))
+
 # 정규분포 곡선 그리기 준비
-x_set1 = np.linspace(summary_stats.loc[0, "Mean (cm)"] - 3*summary_stats.loc[0, "Standard Deviation (cm)"],
-                     summary_stats.loc[0, "Mean (cm)"] + 3*summary_stats.loc[0, "Standard Deviation (cm)"], 100)
+x_set1 = np.linspace(summary_stats.loc[0, "Mean (cm)"] - 3 * summary_stats.loc[0, "Standard Deviation (cm)"],
+                     summary_stats.loc[0, "Mean (cm)"] + 3 * summary_stats.loc[0, "Standard Deviation (cm)"], 100)
 y_set1 = stats.norm.pdf(x_set1, summary_stats.loc[0, "Mean (cm)"], summary_stats.loc[0, "Standard Deviation (cm)"])
 
-x_set2 = np.linspace(summary_stats.loc[1, "Mean (cm)"] - 3*summary_stats.loc[1, "Standard Deviation (cm)"],
-                     summary_stats.loc[1, "Mean (cm)"] + 3*summary_stats.loc[1, "Standard Deviation (cm)"], 100)
+x_set2 = np.linspace(summary_stats.loc[1, "Mean (cm)"] - 3 * summary_stats.loc[1, "Standard Deviation (cm)"],
+                     summary_stats.loc[1, "Mean (cm)"] + 3 * summary_stats.loc[1, "Standard Deviation (cm)"], 100)
 y_set2 = stats.norm.pdf(x_set2, summary_stats.loc[1, "Mean (cm)"], summary_stats.loc[1, "Standard Deviation (cm)"])
 
 # 개별 그래프 시각화 (평균과 표준편차 표시)
@@ -175,3 +189,4 @@ plt.legend()
 plt.grid(True, linestyle='--', alpha=0.6)
 
 plt.show()
+
