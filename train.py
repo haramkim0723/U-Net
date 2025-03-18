@@ -22,7 +22,7 @@ def train_model(
         model,
         device,
         epochs: int = 80,
-        batch_size: int = 27,
+        batch_size: int = 32,
         learning_rate: float = 1e-4,
         val_percent: float = 0.1,
         save_checkpoint: bool = True,
